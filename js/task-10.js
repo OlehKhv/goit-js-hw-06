@@ -7,13 +7,13 @@ function getRandomHexColor() {
 const containerControlsEl = document.querySelector('#controls');
 const inputEl = containerControlsEl.firstElementChild;
 const buttonCreateEl = inputEl.nextElementSibling;
-const buttonDestroyeEl = containerControlsEl.lastElementChild;
+const buttonDestroyEl = containerControlsEl.lastElementChild;
 const containerBoxes = document.querySelector('#boxes');
 
 containerBoxes.classList.add('container-flex');
 
 buttonCreateEl.addEventListener('click', onCreateClick);
-buttonDestroyeEl.addEventListener('click', onDeleteClick);
+buttonDestroyEl.addEventListener('click', onDeleteClick);
 
 function onDeleteClick() {
     clearContainer();
@@ -25,8 +25,8 @@ function onCreateClick() {
         Number(inputEl.value) >= Number(inputEl.min) &&
         Number(inputEl.value) <= Number(inputEl.max)
     ) {
-        containerBoxes.innerHTML = '';
-        createBoxes(inputEl.value);
+        clearContainer();
+        createBoxes(Number(inputEl.value));
         clearInput();
     } else {
         alert('Введіть число від 1 до 100 включно !');
@@ -39,12 +39,13 @@ const clearContainer = () => (containerBoxes.innerHTML = '');
 
 const createBoxes = amount => {
     const markup = [];
-
-    for (let i = 1, j = 30; i <= amount; i++, j += 10) {
+    let sizeBox = 30;
+    for (let i = 1; i <= amount; i += Number(inputEl.step)) {
         markup.push(`<div
-                style="width: ${j}px; height: ${j}px; background-color: ${getRandomHexColor()}"
+                style="width: ${sizeBox}px; height: ${sizeBox}px; background-color: ${getRandomHexColor()}"
             ></div>`);
+        sizeBox += 10;
     }
 
-    containerBoxes.insertAdjacentHTML('afterbegin', markup.join(''));
+    containerBoxes.innerHTML = markup.join('');
 };
